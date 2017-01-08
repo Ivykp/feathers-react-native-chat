@@ -6,9 +6,9 @@ import {
   TouchableHighlight,
   Alert,
 } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import { Actions, ActionConst } from 'react-native-router-flux';
 
-import Login from './Login';
+import Signup from './Signup';
 import baseStyles from './../../config/baseStyles';
 import utils from './../../utils';
 
@@ -44,8 +44,8 @@ export default class LoginContainer extends React.Component {
     });
   }
 
-  login() {
-    const { email, password } = this.state
+  register() {
+    const { email, password } = this.state;
     if (!utils.validateEmail(email) || !utils.validatePassword(password)) {
       Alert.alert('Error', 'Please enter a valid email or password.');
       return;
@@ -53,18 +53,26 @@ export default class LoginContainer extends React.Component {
 
     this.setState({ loading: true });
 
-    this.app.authenticate({
-      type: 'local',
-      email,
-      password,
-    }).then((response) => {
+    const userData = { email, password };
+
+    this.app.service('users').create(userData).then((result) => {
+      this.app.authenticate({
+        type: 'local',
+        email,
+        password,
+      }).then(response => {
+        this.setState({ loading: false });
+        // re-route to main authorized chat   component
+        Actions.MainMenu({ type: ActionConst.RESET });
+      }).catch((error) => {
+        console.log(error);
+        Alert.alert('Error', 'Please enter a valid email or password.');
+        this.setState({ loading: false });
+      });
+    }).catch((err) => {
+      console.log('Err', err);
       this.setState({ loading: false });
-      // re-route to chat app
-      Actions.MainMenu();
-    }).catch((error) => {
-      console.log('ERROR', error);
-      Alert.alert('Error', 'Please enter a valid email or password.');
-      this.setState({ loading: false });
+      Alert.alert('Error', err.message);
     });
   }
 
@@ -77,11 +85,11 @@ export default class LoginContainer extends React.Component {
     Actions.pop();
   }
 
-  renderLoginButton() {
+  renderSignupButton() {
     if (this.state.loading) {
       return (
         <View style={{ alignItems: 'center' }}>
-          <Text>Logging in...</Text>
+          <Text>Creating account...</Text>
         </View>
       );
     }
@@ -89,10 +97,10 @@ export default class LoginContainer extends React.Component {
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <TouchableHighlight
           style={[baseStyles.baseButton, baseStyles.buttonPrimary, { padding: 10 }]}
-          onPress={() => this.login()}
+          onPress={() => this.register()}
           underlayColor="transparent"
         >
-          <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Login</Text>
+          <Text style={[baseStyles.baseButtonText, baseStyles.buttonPrimaryText]}>Create Account</Text>
         </TouchableHighlight>
       </View>
     );
@@ -100,7 +108,7 @@ export default class LoginContainer extends React.Component {
 
   render() {
     return (
-      <Login
+      <Signup
         close={() => this.close()}
         emailBorder={this.state.emailBorder}
         passwordBorder={this.state.passwordBorder}
@@ -109,7 +117,7 @@ export default class LoginContainer extends React.Component {
         password={this.state.password}
         email={this.state.email}
         dimissKeyboard={() => this.dismissKeyboard()}
-        renderLoginButton={() => this.renderLoginButton()}
+        renderSignupButton={() => this.renderSignupButton()}
       />
     );
   }
