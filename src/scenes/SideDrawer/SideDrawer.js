@@ -6,7 +6,7 @@ import SideMenu from './../../components/SideMenu';
 
 class SideDrawer extends Component {
   componentDidMount() {
-    Actions.refresh({ key: 'drawer', ref: this.drawer });
+    Actions.refresh({ key: 'MainMenu', ref: this.drawer });
   }
 
   render() {

@@ -41,7 +41,7 @@ export default StyleSheet.create({
   },
 
   baseButton: {
-    flex: 0.8,
+    height: 50,
     flexDirection: 'column',
     marginBottom: 5,
     width: Dimensions.get('window').width - 30,
