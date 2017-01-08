@@ -5,6 +5,11 @@ import { Actions, DefaultRenderer } from 'react-native-router-flux';
 import SideMenu from './../../components/SideMenu';
 
 class SideDrawer extends Component {
+  constructor(props) {
+    super(props);
+    this.app = props.app;
+  }
+  
   componentDidMount() {
     Actions.refresh({ key: 'MainMenu', ref: this.drawer });
   }
@@ -18,15 +23,18 @@ class SideDrawer extends Component {
         open={state.open}
         onOpen={() => Actions.refresh({ key: state.key, open: true })}
         onClose={() => Actions.refresh({ key: state.key, open: false })}
-        type="displace"
-        content={<SideMenu />}
+        type="static"
+        content={<SideMenu app={this.app}/>}
         tapToClose
-        openDrawerOffset={0.2}
-        panCloseMask={0.2}
+        tweenHandler={Drawer.tweenPresets.parallax}
+        openDrawerOffset={0.6}
+        tweenDuration={150}
+        panCloseMask={0.8}
         negotiatePan
-        tweenHandler={ratio => ({
+        tweenEasing="easeInOutBounce"
+        /* tweenHandler={ratio => ({
           main: { opacity: Math.max(0.54, 1 - ratio) },
-        })}
+        })}*/
       >
         <DefaultRenderer navigationState={children[0]} onNavigate={this.props.onNavigate} />
       </Drawer>

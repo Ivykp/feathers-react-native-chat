@@ -8,8 +8,6 @@ import {
 import {
   AsyncStorage,
   Navigator,
-  Platform,
-  Text,
   TouchableHighlight,
   View,
 } from 'react-native';
@@ -108,7 +106,7 @@ class App extends Component {
           title="Launch"
           initial={this.state.connected}
         />
-        <Scene key="MainMenu" component={SideDrawer} type={ActionConst.RESET}>
+        <Scene key="MainMenu" component={SideDrawer} type={ActionConst.RESET} app={this.app}>
           <Scene key="mainContainer" tabs={false}>
             <Scene
               component={Chat}
@@ -126,13 +124,12 @@ class App extends Component {
           </Scene>
         </Scene>
 
-        <Scene key="login" component={Login} title="Login" schema="modal" app={this.app} />
-        <Scene key="signup" component={Signup} title="Signup" schema="modal" app={this.app} />
+        <Scene key="login" component={Login} title="Login" app={this.app} />
+        <Scene key="signup" component={Signup} title="Signup" app={this.app} />
         <Scene
           key="offline"
           component={Offline}
           title="Offline"
-          schema="boot"
           app={this.app}
           direction="fade"
           initial={!this.state.connected}
