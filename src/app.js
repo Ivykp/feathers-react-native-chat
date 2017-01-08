@@ -134,7 +134,9 @@ class App extends Component {
           title="Offline"
           schema="boot"
           app={this.app}
+          direction="fade"
           initial={!this.state.connected}
+          type={ActionConst.RESET}
         />
       </Router>
     );
