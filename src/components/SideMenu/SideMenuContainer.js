@@ -3,6 +3,7 @@ import { ListView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 
 import SideMenu from './SideMenu';
+import utils from './../../utils';
 
 class SideMenuContainer extends React.Component {
   constructor(props) {
@@ -18,8 +19,9 @@ class SideMenuContainer extends React.Component {
   }
 
   componentDidMount() {
-    console.log('Mounting...');
     const query = {
+      // TODO: Add logic to handle online users.
+      // TODO (EK): Maybe set a higher max limit.
       query: {
         // online: true,
         _id: { $nin: [this.app.get('user')._id] },
@@ -30,9 +32,13 @@ class SideMenuContainer extends React.Component {
     this.app.service('users')
       .find(query)
       .then((result) => {
+        const users = result.data.map(user => (
+          { ...user, username: utils.usernameFromEmail(user.email) }
+        ));
+
         this.setState({
-          onlineUserCount: result.total,
-          users: result.data,
+          onlineUsersCount: result.total,
+          users,
         });
       })
       .catch(error => console.log('Error:', error));

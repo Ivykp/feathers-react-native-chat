@@ -10,9 +10,9 @@ const SideMenu = (props) => {
   const nOnline = props.onlineUserCount;
 
   const onlinePhrase = {
-    [nOnline]: `${nOnline} people online`,
+    [nOnline]: `${nOnline} people registered`,
     0: 'You\'re all alone :-(',
-    1: `${nOnline} person online`,
+    1: `${nOnline} person registered`,
   };
 
   return (
@@ -21,6 +21,7 @@ const SideMenu = (props) => {
         <Text style={styles.userCount}>{onlinePhrase[nOnline]}</Text>
       </View>
       <ListView
+        keyboardShouldPersistTaps="always"
         enableEmptySections
         dataSource={props.ds.cloneWithRows(props.data)}
         style={{ padding: 10, flex: 0.85 }}

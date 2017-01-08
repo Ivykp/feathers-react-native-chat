@@ -27,7 +27,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     padding: 5,
     color: '#333',
-    height: 24,
     marginLeft: 5,
   },
   drawerMain: {

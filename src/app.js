@@ -10,6 +10,7 @@ import {
   Navigator,
   TouchableHighlight,
   View,
+  StyleSheet,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import feathers from 'feathers/client';
@@ -37,6 +38,19 @@ const io = require('socket.io-client');
 
 
 const { FloatFromRight, FloatFromBottom, FadeAndroid } = Navigator;
+
+const styles = StyleSheet.create({
+  navBar: {
+    height: Navigator.NavigationBar.Styles.General.NavBarHeight,
+  },
+  navTitle: {
+    color: 'grey',
+  },
+  routerScene: {
+    // Some navbar padding to avoid content overlap
+    paddingTop: Navigator.NavigationBar.Styles.General.NavBarHeight - 2,
+  },
+});
 
 class App extends Component {
   constructor(props) {
@@ -85,7 +99,7 @@ class App extends Component {
     if (this.state.connected) {
       return (
         <TouchableHighlight
-          onPress={() => Actions.get('MainMenu').ref.toggle()}
+          onPress={() => { console.log('click'); return Actions.get('MainMenu').ref.toggle()}}
           underlayColor="transparent"
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'transparent', marginLeft: 0, width: 50, height: 50 }}>
           <Icon name="ios-menu" size={36} color={colors.accentColor} />
@@ -97,7 +111,10 @@ class App extends Component {
 
   render() {
     return (
-      <Router>
+      <Router
+        navigationBarStyle={styles.navBar}
+        titleStyle={styles.navTitle}
+      >
         <Scene
           key="launch"
           component={Launch}
@@ -114,6 +131,7 @@ class App extends Component {
               title="Chat"
               app={this.app} events={this.eventEmitter}
               renderLeftButton={this.renderLeftButton}
+              sceneStyle={styles.routerScene}
             />
             <Scene
               component={Chat}

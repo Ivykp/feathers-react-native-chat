@@ -9,7 +9,7 @@ class SideDrawer extends Component {
     super(props);
     this.app = props.app;
   }
-  
+
   componentDidMount() {
     Actions.refresh({ key: 'MainMenu', ref: this.drawer });
   }
@@ -17,24 +17,23 @@ class SideDrawer extends Component {
   render() {
     const state = this.props.navigationState;
     const children = state.children;
+    const drawerStyles = { main: { shadowColor: "#000000", shadowOpacity: 0.3, shadowRadius: 2, elevation: 14, backgroundColor: '#fff' }, drawer: { backgroundColor: '#F1F1F1' } };
     return (
       <Drawer
         ref={(drawer) => { this.drawer = drawer; }}
         open={state.open}
         onOpen={() => Actions.refresh({ key: state.key, open: true })}
         onClose={() => Actions.refresh({ key: state.key, open: false })}
-        type="static"
-        content={<SideMenu app={this.app}/>}
+        type="displace"
+        content={<SideMenu app={this.app} />}
+        styles={drawerStyles}
         tapToClose
-        tweenHandler={Drawer.tweenPresets.parallax}
         openDrawerOffset={0.6}
-        tweenDuration={150}
-        panCloseMask={0.8}
+        panCloseMask={0.6}
         negotiatePan
-        tweenEasing="easeInOutBounce"
-        /* tweenHandler={ratio => ({
+        tweenHandler={ratio => ({
           main: { opacity: Math.max(0.54, 1 - ratio) },
-        })}*/
+        })}
       >
         <DefaultRenderer navigationState={children[0]} onNavigate={this.props.onNavigate} />
       </Drawer>

@@ -10,4 +10,6 @@ const validateEmail = (email) => {
 // TODO: Add more robust validation
 const validatePassword = password => password.length > 0;
 
-export default { validateEmail, validatePassword };
+const usernameFromEmail = email => /(.*)@.*/.exec(email)[1];
+
+export default { validateEmail, validatePassword, usernameFromEmail };
